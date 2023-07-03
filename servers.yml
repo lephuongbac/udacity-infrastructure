@@ -54,7 +54,6 @@ Resources:
           cd /var/www/html
           echo "it works! Udagram, Udacity" > index.html
       ImageId: ami-0df7a207adb9748c7
-      KeyName: udacity
       SecurityGroups:
         - Ref: WebServerSecGroup
       InstanceType: t2.micro
