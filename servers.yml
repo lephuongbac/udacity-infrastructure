@@ -30,8 +30,8 @@ Resources:
         Fn::ImportValue: !Sub "${EnvironmentName}-VPCID"
       SecurityGroupIngress:
         - IpProtocol: tcp
-          FromPort: 8080
-          ToPort: 8080
+          FromPort: 80
+          ToPort: 80
           CidrIp: 0.0.0.0/0
         - IpProtocol: tcp
           FromPort: 22
@@ -51,11 +51,13 @@ Resources:
           sudo apt-get update -y
           sudo apt-get install apache2 -y
           sudo systemctl start apache2.service
-      ImageId: ami-0c91f4476780c2eaf
+          cd /var/www/html
+          echo "it works! Udagram, Udacity" > index.html
+      ImageId: ami-0df7a207adb9748c7
       KeyName: udacity
       SecurityGroups:
         - Ref: WebServerSecGroup
-      InstanceType: t3.medium
+      InstanceType: t2.micro
       BlockDeviceMappings:
         - DeviceName: "/dev/sdk"
           Ebs:
@@ -67,8 +69,8 @@ Resources:
         - Fn::ImportValue: !Sub "${EnvironmentName}-PRIV-NETS"
       LaunchConfigurationName:
         Ref: WebAppLaunchConfig
-      MinSize: "3"
-      MaxSize: "5"
+      MinSize: "1"
+      MaxSize: "1"
       TargetGroupARNs:
         - Ref: WebAppTargetGroup
   WebAppLB:
@@ -109,9 +111,13 @@ Resources:
       HealthCheckProtocol: HTTP
       HealthCheckTimeoutSeconds: 8
       HealthyThresholdCount: 2
-      Port: 8080
+      Port: 80
       Protocol: HTTP
       UnhealthyThresholdCount: 5
       VpcId:
         Fn::ImportValue:
           Fn::Sub: "${EnvironmentName}-VPCID"
+Outputs:
+  WebServerLoadBalancerURL:
+    Description: "Load balancer URL within the http:// in front"
+    Value: !Sub http://${WebAppLB.DNSName}
