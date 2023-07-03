@@ -51,7 +51,7 @@ Resources:
           sudo apt-get update -y
           sudo apt-get install apache2 -y
           sudo systemctl start apache2.service
-      ImageId: ami-024437e14746c4dcb
+      ImageId: ami-0c91f4476780c2eaf
       KeyName: udacity
       SecurityGroups:
         - Ref: WebServerSecGroup
